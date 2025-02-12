@@ -1,4 +1,4 @@
-module github.com/sean-der/fail2go
+module github.com/rasyidwi/fail2go
 
 go 1.19
 
