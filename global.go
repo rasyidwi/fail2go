@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	ogórek "github.com/kisielk/og-rek"
+	"github.com/kisielk/og-rek"
 	_ "github.com/mattn/go-sqlite3"
 )
 
