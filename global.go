@@ -72,7 +72,7 @@ func (conn *Conn) GlobalBans() (results []Ban, err error) {
 	if err != nil {
 		return nil, err
 	}
-	rows, err := dbConn.Query("select jail, ip, timeofban, data from bans")
+	rows, err := dbConn.Query("select jail, ip, timeofban, data from bips")
 	if err != nil {
 		return nil, err
 	}
