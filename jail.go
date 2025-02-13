@@ -17,6 +17,7 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 
 	action := fail2banOutput.([]interface{})[1].(ogórek.Tuple)[1]
 	filter := fail2banOutput.([]interface{})[0].(ogórek.Tuple)[1]
+	fmt.Println(action)
 
 	currentlyFailed = filter.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalFailed = filter.([]interface{})[1].(ogórek.Tuple)[1].(int64)
@@ -25,6 +26,7 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
 	//if _, ok := action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{})[0].(ogórek.Call); ok {
 	//	IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	fmt.Println(len(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{})))
 	if len(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{})) == 0 {
 		IPList = []string{} // Pastikan tetap slice kosong, bukan nil
 	} else {
