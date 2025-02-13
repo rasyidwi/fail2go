@@ -2,6 +2,7 @@ package fail2go
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 
 	ogórek "github.com/kisielk/og-rek"
@@ -12,6 +13,7 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	if err != nil {
 		return
 	}
+	fmt.Printf("fail2banOutput: %#v\n", fail2banOutput)
 
 	action := fail2banOutput.([]interface{})[1].(ogórek.Tuple)[1]
 	filter := fail2banOutput.([]interface{})[0].(ogórek.Tuple)[1]
