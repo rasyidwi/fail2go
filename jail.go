@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	ogórek "github.com/kisielk/og-rek"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed int64, fileList []string, currentlyBanned int64, totalBanned int64, IPList []string, err error) {
@@ -13,43 +14,20 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	if err != nil {
 		return
 	}
-
 	fmt.Printf("fail2banOutput: %#v\n", fail2banOutput)
 
-	// Pastikan fail2banOutput memiliki struktur data yang benar
-	if len(fail2banOutput.([]interface{})) < 2 {
-		err = fmt.Errorf("unexpected fail2ban output format")
-		return
-	}
-
-	// Ambil data Filter dan Actions
-	filter := fail2banOutput.([]interface{})[0].(ogórek.Tuple)[1]
 	action := fail2banOutput.([]interface{})[1].(ogórek.Tuple)[1]
+	filter := fail2banOutput.([]interface{})[0].(ogórek.Tuple)[1]
 
-	// Pastikan jumlah elemen dalam Filter dan Actions sesuai
-	if len(filter.([]interface{})) < 3 || len(action.([]interface{})) < 3 {
-		err = fmt.Errorf("unexpected fail2ban output structure")
-		return
-	}
-
-	// Parsing data dari Filter
 	currentlyFailed = filter.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalFailed = filter.([]interface{})[1].(ogórek.Tuple)[1].(int64)
 	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
-
-	// Parsing data dari Actions
 	currentlyBanned = action.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
-
-	// Cek apakah Banned IP List kosong
-	if ipListRaw, ok := action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}); ok {
-		if len(ipListRaw) > 0 {
-			IPList = interfaceSliceToStringSlice(ipListRaw)
-		} else {
-			IPList = []string{} // Hindari index out of range error
-		}
+	if _, ok := action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{})[0].(ogórek.Call); ok {
+		IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	} else {
-		IPList = []string{}
+		IPList = interfaceSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	}
 
 	return

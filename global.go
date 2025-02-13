@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/kisielk/og-rek"
+	ogórek "github.com/kisielk/og-rek"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -72,7 +72,7 @@ func (conn *Conn) GlobalBans() (results []Ban, err error) {
 	if err != nil {
 		return nil, err
 	}
-	rows, err := dbConn.Query("select jail, ip, timeofban, data from bans group by jail, ip")
+	rows, err := dbConn.Query("select jail, ip, timeofban, data from bips")
 	if err != nil {
 		return nil, err
 	}
